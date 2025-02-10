@@ -45,7 +45,7 @@ const UserDashboard = () => {
   if (loading || !user) {
     return (
       <div className="flex items-center justify-center min-h-[calc(100vh-8rem)]">
-        <div className="text-white">Učitavanje...</div>
+        <div className="loading-text">Učitavanje...</div>
       </div>
     );
   }
@@ -54,30 +54,30 @@ const UserDashboard = () => {
     <div className="dashboard-container">
       <div className="container-custom px-4 py-8">
         <div className="dashboard-card">
-          <div className="border-b border-[#E8E8E8]/10 pb-6 mb-6">
+          <div className="border-bottom pb-6 mb-6">
             <h2 className="text-3xl font-bold">
               Dobrodošli, {user?.name || 'Korisniče'}!
             </h2>
           </div>
 
-          <div className="dashboard-section">
-            <h3 className="text-xl font-semibold mb-4">Lične Informacije</h3>
+          <div className="card">
+            <h3 className="text-xl font-bold mb-4">Lične Informacije</h3>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-[#E8E8E8]/70">Ime i prezime</label>
-                <p className="mt-1">{user?.name || 'Nije uneto'}</p>
+                <label className="form-label">Ime i prezime</label>
+                <p className="text-body mt-1">{user?.name || 'Nije uneto'}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#E8E8E8]/70">Email</label>
-                <p className="mt-1">{user?.email || 'Nije uneto'}</p>
+                <label className="form-label">Email</label>
+                <p className="text-body mt-1">{user?.email || 'Nije uneto'}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#E8E8E8]/70">Broj Telefona</label>
-                <p className="mt-1">{user?.phone_number || 'Nije uneto'}</p>
+                <label className="form-label">Broj Telefona</label>
+                <p className="text-body mt-1">{user?.phone_number || 'Nije uneto'}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#E8E8E8]/70">Tip Naloga</label>
-                <p className="mt-1">Korisnik</p>
+                <label className="form-label">Tip Naloga</label>
+                <p className="text-body mt-1">Korisnik</p>
               </div>
             </div>
           </div>

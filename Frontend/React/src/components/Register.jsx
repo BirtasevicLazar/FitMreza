@@ -103,18 +103,18 @@ const Register = () => {
             <button
               type="button"
               onClick={() => setFormData({ ...formData, type: 'user' })}
-              className={`card hover-card p-6 ${formData.type === 'user' ? 'border-[#E8E8E8]' : 'border-transparent'}`}
+              className={`card hover-card p-6 ${formData.type === 'user' ? 'border-primary' : 'border-transparent'}`}
             >
-              <h3 className="text-xl font-bold mb-2">Korisnik</h3>
-              <p className="text-[#E8E8E8]/70">Pronađite trenera i započnite svoje fitness putovanje</p>
+              <h3 className="text-xl font-bold text-heading mb-2">Korisnik</h3>
+              <p className="text-body">Pronađite trenera i započnite svoje fitness putovanje</p>
             </button>
             <button
               type="button"
               onClick={() => setFormData({ ...formData, type: 'trainer' })}
-              className={`card hover-card p-6 ${formData.type === 'trainer' ? 'border-[#E8E8E8]' : 'border-transparent'}`}
+              className={`card hover-card p-6 ${formData.type === 'trainer' ? 'border-primary' : 'border-transparent'}`}
             >
-              <h3 className="text-xl font-bold mb-2">Trener</h3>
-              <p className="text-[#E8E8E8]/70">Ponudite svoje usluge i pronađite nove klijente</p>
+              <h3 className="text-xl font-bold text-heading mb-2">Trener</h3>
+              <p className="text-body">Ponudite svoje usluge i pronađite nove klijente</p>
             </button>
           </div>
         </div>
@@ -232,13 +232,13 @@ const Register = () => {
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#000000] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="page-container flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold">Registracija</h2>
-          <p className="mt-2 text-[#E8E8E8]/70">
+          <p className="mt-2 text-muted">
             Već imate nalog?{' '}
-            <Link to="/login" className="text-[#E8E8E8] hover:text-white">
+            <Link to="/login" className="text-secondary hover-accent">
               Prijavite se
             </Link>
           </p>
@@ -250,15 +250,15 @@ const Register = () => {
             {steps.slice(0, formData.type === 'trainer' ? 4 : 3).map((s, i) => (
               <span
                 key={i}
-                className={`text-sm ${step > i ? 'text-[#E8E8E8]' : 'text-[#E8E8E8]/50'}`}
+                className={`text-sm ${step > i ? 'text-body' : 'text-muted'}`}
               >
                 {s.title}
               </span>
             ))}
           </div>
-          <div className="h-2 bg-[#000000] rounded-full border-2 border-[#E8E8E8]/10">
+          <div className="h-2 bg-secondary rounded-full border-2 border-muted">
             <motion.div
-              className="h-full bg-[#E8E8E8] rounded-full"
+              className="h-full bg-accent-primary rounded-full"
               initial={{ width: "0%" }}
               animate={{ 
                 width: `${(step / (formData.type === 'trainer' ? 4 : 3)) * 100}%` 
@@ -270,7 +270,7 @@ const Register = () => {
 
         <div className="form-container">
           {error && (
-            <div className="error-text bg-red-500/10 border border-red-500 p-3 rounded mb-4 text-center">
+            <div className="error-container">
               {error}
             </div>
           )}

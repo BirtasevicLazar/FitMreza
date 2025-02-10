@@ -13,7 +13,7 @@ const Home = () => {
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
         viewport={{ once: true }}
-        className="py-20 bg-[#000000]"
+        className="content-section"
       >
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-16">
@@ -29,11 +29,11 @@ const Home = () => {
                 viewport={{ once: true }}
                 className="card relative"
               >
-                <div className="absolute -top-4 -left-4 w-8 h-8 rounded-full bg-[#000000] border-2 border-[#E8E8E8] flex items-center justify-center font-bold">
+                <div className="absolute -top-4 -left-4 w-8 h-8 rounded-full bg-main border-2 border-primary flex items-center justify-center font-bold">
                   {index + 1}
                 </div>
                 <h3 className="text-xl font-bold mb-4">{step.title}</h3>
-                <p className="text-[#E8E8E8]/70">{step.description}</p>
+                <p className="text-muted">{step.description}</p>
               </motion.div>
             ))}
           </div>
@@ -46,7 +46,7 @@ const Home = () => {
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
         viewport={{ once: true }}
-        className="py-20 bg-[#000000] relative overflow-hidden"
+        className="content-section relative overflow-hidden"
       >
         <div className="absolute inset-0 opacity-20 bg-[url('/grid.svg')]" />
         <div className="container mx-auto px-4 relative z-10">
@@ -55,7 +55,7 @@ const Home = () => {
               Spremni da Započnete Svoje
               <span className="gradient-text block mt-2">Fitness Putovanje?</span>
             </h2>
-            <p className="text-lg text-[#E8E8E8]/80 mb-8">
+            <p className="text-lg text-muted mb-8">
               Pridružite se hiljadama zadovoljnih korisnika koji su već transformisali svoje živote uz FitMrezu.
             </p>
             <motion.div

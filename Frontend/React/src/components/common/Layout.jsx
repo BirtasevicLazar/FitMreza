@@ -18,13 +18,13 @@ const Layout = ({ children }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#000000] flex flex-col">
+    <div className="page-container flex flex-col">
       <Navbar
         isAuthenticated={isAuthenticated}
         userType={user?.type}
         onLogout={handleLogout}
       />
-      <main className="flex-grow bg-[#000000]">
+      <main className="flex-grow bg-main">
         {children}
       </main>
       <Footer />

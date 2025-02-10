@@ -45,7 +45,7 @@ const Login = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen flex items-center justify-center bg-[#000000] px-4 sm:px-6 lg:px-8"
+      className="page-container flex items-center justify-center px-4 sm:px-6 lg:px-8"
     >
       <div className="max-w-md w-full">
         <motion.div 
@@ -55,9 +55,9 @@ const Login = () => {
           className="text-center mb-8"
         >
           <h2 className="text-3xl font-bold mb-2">Dobrodošli nazad</h2>
-          <p className="text-[#E8E8E8]/70">
+          <p className="text-muted">
             Nemate nalog?{' '}
-            <Link to="/register" className="text-[#E8E8E8] hover:text-white">
+            <Link to="/register" className="text-secondary hover-primary">
               Registrujte se
             </Link>
           </p>
@@ -73,7 +73,7 @@ const Login = () => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="error-text bg-red-500/10 border border-red-500 p-3 rounded mb-4 text-center"
+              className="error-text bg-card border border-red-500 p-3 rounded mb-4 text-center"
             >
               {error}
             </motion.div>
@@ -118,15 +118,15 @@ const Login = () => {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 rounded border-[#E8E8E8] bg-[#000000] text-[#E8E8E8] focus:ring-[#E8E8E8]"
+                  className="checkbox-custom"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-[#E8E8E8]/70">
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-muted">
                   Zapamti me
                 </label>
               </div>
 
               <div className="text-sm">
-                <Link to="/forgot-password" className="text-[#E8E8E8]/70 hover:text-[#E8E8E8]">
+                <Link to="/forgot-password" className="text-muted hover-primary">
                   Zaboravili ste lozinku?
                 </Link>
               </div>
@@ -139,7 +139,7 @@ const Login = () => {
             >
               {loading ? (
                 <span className="flex items-center justify-center">
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>

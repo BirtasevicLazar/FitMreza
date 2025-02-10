@@ -3,69 +3,204 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Najdublja crna i najsjajnija srebrna */
+/* Glavna paleta boja - Profesionalna tamna tema */
 :root {
   color-scheme: dark;
-  --deepest-black: #000000;
-  --shiny-silver: #E8E8E8;
+  /* Primarne boje (60%) - Pozadina */
+  --background-primary: #0A0A0A;    /* Duboko crna za glavni sadržaj */
+  --background-secondary: #121212;  /* Malo svetlija crna */
+  --background-tertiary: #1A1A1A;   /* Tamno siva za kontrast */
+  
+  /* Sekundarne boje (30%) - Tekst i elementi */
+  --text-primary: #E5E5E5;          /* Srebrno bela za glavni tekst */
+  --text-secondary: #FFFFFF;        /* Čisto bela za naslove */
+  --text-muted: rgba(229, 229, 229, 0.7);  /* Prigušena srebrna */
+  
+  /* Akcentne boje (10%) - CTA i važni elementi */
+  --accent-primary: #C0C0C0;        /* Srebrna */
+  --accent-secondary: #D4D4D4;      /* Svetlija srebrna */
+  --accent-hover: #A0A0A0;          /* Tamnija srebrna za hover */
+  
+  /* Dodatne funkcionalne boje */
+  --border-light: rgba(229, 229, 229, 0.1);
+  --border-medium: rgba(229, 229, 229, 0.15);
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --overlay: rgba(10, 10, 10, 0.97);
+  
+  /* Footer specifične boje */
+  --footer-text: #A0A0A0;
+  --footer-link: #C0C0C0;
+  --footer-link-hover: #FFFFFF;
+  --footer-border: #2A2A2A;
+  
+  /* Error/Success boje */
+  --error-bg: #2C1515;
+  --error-border: #DC2626;
+  --error-text: #EF4444;
+  --success-text: #10B981;
+  
+  /* Loading stanje */
+  --loading-text: var(--text-primary);
+}
+
+/* Dodatne klase za tekst */
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+/* Dodatne klase za pozadine */
+.bg-main {
+  background: var(--background-primary);
+}
+
+.bg-gradient {
+  background: linear-gradient(to bottom right, var(--background-primary), var(--background-tertiary));
+}
+
+.bg-card {
+  background: var(--background-secondary);
+}
+
+/* Dodatne klase za bordere */
+.border-primary {
+  border-color: var(--accent-primary);
+}
+
+.border-muted {
+  border-color: var(--border-light);
+}
+
+/* Dodatne klase za hover stanja */
+.hover-primary:hover {
+  color: var(--accent-primary);
+}
+
+.hover-bg:hover {
+  background: var(--background-secondary);
+}
+
+/* Dodatne klase za input elemente */
+.checkbox-custom {
+  @apply h-4 w-4 rounded;
+  border-color: var(--border-light);
+  background: var(--background-primary);
+  color: var(--accent-primary);
+}
+
+.checkbox-custom:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px var(--shadow-color);
+}
+
+/* Dodatne klase za layout */
+.page-container {
+  @apply min-h-screen;
+  background: var(--background-primary);
+}
+
+.content-section {
+  background: var(--background-primary);
+  @apply py-20;
+}
+
+/* Dodatne klase za bordere */
+.border-bottom {
+  border-bottom: 1px solid var(--border-light);
+}
+
+.border-top {
+  border-top: 1px solid var(--border-light);
 }
 
 @layer base {
   body {
-    @apply bg-[#000000] text-[#E8E8E8] font-sans antialiased;
-    background: var(--deepest-black);
+    @apply font-sans antialiased min-h-screen;
+    background: var(--background-primary);
+    color: var(--text-primary);
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold tracking-tight text-[#E8E8E8];
-    text-shadow: 0 0 10px rgba(232, 232, 232, 0.3);
+    @apply font-bold tracking-tight;
+    color: var(--text-secondary);
   }
 }
 
 @layer components {
   .btn {
-    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 
-           focus:outline-none focus:ring-2 focus:ring-[#E8E8E8];
+    @apply px-6 py-3 rounded-xl font-medium transition-all duration-300 
+           focus:outline-none focus:ring-2 focus:ring-offset-2
+           transform hover:scale-105 active:scale-95;
   }
 
   .btn-primary {
-    @apply bg-[#E8E8E8] text-[#000000] hover:bg-[#FFFFFF]
-           shadow-lg shadow-[#E8E8E8]/20;
+    background: var(--accent-primary);
+    color: #FFFFFF;
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.12);
+  }
+
+  .btn-primary:hover {
+    background: var(--accent-hover);
+    box-shadow: 0 6px 8px rgba(37, 99, 235, 0.16);
   }
 
   .btn-secondary {
-    @apply bg-[#000000] text-[#E8E8E8] hover:bg-[#000000]
-           border-2 border-[#E8E8E8] hover:shadow-[#E8E8E8]/20 hover:shadow-lg;
+    background: transparent;
+    color: var(--accent-primary);
+    border: 2px solid var(--accent-primary);
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.08);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(37, 99, 235, 0.05);
+    border-color: var(--accent-hover);
   }
 
   .input-field {
-    @apply w-full px-4 py-2 bg-[#000000] border-2 border-[#E8E8E8] rounded-lg text-[#E8E8E8] 
-           placeholder-[#E8E8E8]/70 focus:outline-none focus:ring-2 focus:ring-[#E8E8E8] 
-           focus:border-transparent transition-all duration-200
-           shadow-inner shadow-[#E8E8E8]/10;
+    @apply w-full px-5 py-4 rounded-xl transition-all duration-300;
+    background: var(--background-primary);
+    color: var(--text-primary);
+    border: 2px solid var(--border-light);
+  }
+
+  .input-field:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
   }
 
   .form-label {
-    @apply block text-sm font-medium text-[#E8E8E8] mb-1;
+    @apply block text-sm font-medium mb-2 ml-1;
+    color: var(--text-primary);
   }
 
   .card {
-    @apply bg-[#000000] rounded-lg p-6 border-2 border-[#E8E8E8]
-           shadow-lg shadow-[#E8E8E8]/10 transition-all duration-200;
+    background: var(--background-primary);
+    border: 1px solid var(--border-light);
+    @apply rounded-2xl p-8 transition-all duration-300;
+    box-shadow: 0 4px 6px var(--shadow-color);
   }
 
-  .card-header {
-    @apply border-b-2 border-[#E8E8E8] pb-4 mb-4;
+  .card:hover {
+    box-shadow: 0 8px 12px var(--shadow-color);
+    border-color: var(--border-medium);
   }
 
   .nav-link {
-    @apply text-[#E8E8E8] hover:text-[#FFFFFF] px-3 py-2 rounded-md text-sm font-medium 
-           transition-all duration-200 hover:bg-[#000000] border-2 border-transparent 
-           hover:border-[#E8E8E8] hover:shadow-lg hover:shadow-[#E8E8E8]/10;
+    color: var(--text-secondary);
+    @apply px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300;
+  }
+
+  .nav-link:hover {
+    background: var(--background-secondary);
+    color: var(--accent-primary);
   }
 
   .nav-link-active {
-    @apply text-[#FFFFFF] bg-[#000000] border-2 border-[#E8E8E8] shadow-lg shadow-[#E8E8E8]/10;
+    color: var(--accent-primary);
+    background: var(--background-secondary);
   }
 
   .container-custom {
@@ -73,76 +208,83 @@
   }
 
   .gradient-text {
-    @apply text-[#E8E8E8] font-bold;
-    text-shadow: 0 0 10px rgba(232, 232, 232, 0.5);
+    background: linear-gradient(135deg, var(--accent-primary), #4F46E5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
-  .hover-card {
-    @apply transform transition-all duration-300 hover:scale-105 
-           hover:shadow-2xl hover:shadow-[#E8E8E8]/30
-           border-2 border-[#E8E8E8];
-  }
-
-  /* Navbar specifične klase */
   .navbar {
-    @apply bg-[#000000] border-b-2 border-[#E8E8E8]/10 backdrop-blur-md;
+    background: var(--background-primary);
+    border-bottom: 1px solid var(--border-light);
+    @apply sticky top-0 z-50 transition-all duration-300;
+    box-shadow: 0 2px 4px var(--shadow-color);
   }
 
-  /* Footer specifične klase */
   .footer {
-    @apply bg-[#000000] border-t-2 border-[#E8E8E8]/10;
+    background: var(--background-secondary);
+    border-top: 1px solid var(--border-light);
   }
 
-  /* Dashboard specifične klase */
   .dashboard-container {
-    @apply bg-[#000000] min-h-screen;
+    background: var(--background-secondary);
+    @apply min-h-screen py-12;
   }
 
   .dashboard-card {
-    @apply bg-[#000000] border-2 border-[#E8E8E8] rounded-lg p-6
-           shadow-lg shadow-[#E8E8E8]/10;
+    background: var(--background-primary);
+    border: 1px solid var(--border-light);
+    @apply rounded-2xl p-8 transition-all duration-300;
+    box-shadow: 0 4px 6px var(--shadow-color);
   }
 
-  .dashboard-section {
-    @apply bg-[#000000] border-2 border-[#E8E8E8] rounded-lg p-6 mb-6;
-  }
-
-  /* Forme i input polja */
   .form-container {
-    @apply max-w-md w-full mx-auto bg-[#000000] rounded-lg p-8
-           border-2 border-[#E8E8E8] shadow-lg shadow-[#E8E8E8]/10;
+    background: var(--background-primary);
+    border: 1px solid var(--border-light);
+    @apply max-w-md w-full mx-auto rounded-2xl p-8 transition-all duration-300;
+    box-shadow: 0 8px 16px var(--shadow-color);
   }
 
   .error-text {
-    @apply text-red-400 text-sm mt-1 font-semibold;
-    text-shadow: 0 0 8px rgba(248, 113, 113, 0.4);
+    color: #DC2626;
+    @apply text-sm mt-1 font-medium;
   }
 
   .success-text {
-    @apply text-green-400 text-sm mt-1 font-semibold;
-    text-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
+    color: var(--accent-primary);
+    @apply text-sm mt-1 font-medium;
   }
 
-  .loading-spinner {
-    @apply animate-spin h-5 w-5 text-[#E8E8E8];
-    filter: drop-shadow(0 0 2px rgba(232, 232, 232, 0.5));
+  /* Dodatne utility klase */
+  .bg-secondary {
+    background: var(--background-secondary);
+  }
+
+  .border-light {
+    border-color: var(--border-light);
+  }
+
+  .hover-accent:hover {
+    color: var(--accent-primary);
   }
 }
 
-/* Custom Scrollbar sa svetlećim efektom */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-[#000000];
+  background: var(--background-secondary);
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-[#E8E8E8] rounded-full;
-  border: 2px solid #000000;
-  box-shadow: 0 0 10px rgba(232, 232, 232, 0.3);
+  background: var(--accent-primary);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-hover);
 }
 
 /* Animations */
@@ -161,8 +303,66 @@
   animation: fadeIn 0.5s ease-out;
 }
 
-/* Glass Effect sa svetlećim obrubom */
+/* Glass Effect */
 .glass {
-  @apply backdrop-blur-lg bg-[#000000]/80 border-2 border-[#E8E8E8];
-  box-shadow: 0 0 15px rgba(232, 232, 232, 0.2);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 8px 32px var(--shadow-color);
+}
+
+/* Hover Effects */
+.hover-card {
+  transition: all 0.3s ease;
+}
+
+.hover-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(212, 175, 55, 0.1);
+  border-color: var(--accent-primary);
+}
+
+/* Footer specifične klase */
+.footer-heading {
+  color: var(--text-secondary);
+  @apply text-lg font-semibold mb-4;
+}
+
+.footer-text {
+  color: var(--footer-text);
+}
+
+.footer-link {
+  color: var(--footer-link);
+  @apply transition-colors duration-300;
+}
+
+.footer-link:hover {
+  color: var(--footer-link-hover);
+}
+
+.footer-border {
+  border-color: var(--footer-border);
+}
+
+/* Error/Success specifične klase */
+.error-container {
+  background: var(--error-bg);
+  border-color: var(--error-border);
+  color: var(--error-text);
+  @apply p-3 rounded mb-4 text-center;
+}
+
+/* Loading specifične klase */
+.loading-text {
+  color: var(--loading-text);
+}
+
+/* Dodatne utility klase */
+.text-heading {
+  color: var(--text-secondary);
+}
+
+.text-body {
+  color: var(--text-primary);
 }

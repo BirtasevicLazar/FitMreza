@@ -11,7 +11,7 @@ const Hero = () => {
     >
       {/* Pozadinski efekat */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#000000] via-[#000000] to-[#000000]" />
+        <div className="absolute inset-0 bg-gradient" />
         <div className="absolute inset-0 opacity-20 bg-[url('/grid.svg')]" />
       </div>
 
@@ -29,7 +29,7 @@ const Hero = () => {
               Transformišite Svoje
               <span className="gradient-text block mt-2">Fitness Putovanje</span>
             </h1>
-            <p className="text-lg lg:text-xl text-[#E8E8E8]/80 mb-8 max-w-2xl">
+            <p className="text-lg lg:text-xl text-muted mb-8 max-w-2xl">
               Povežite se sa profesionalnim trenerima, pratite svoj napredak i dostignite svoje fitness ciljeve brže nego ikad.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -59,7 +59,7 @@ const Hero = () => {
               >
                 <div className="text-2xl mb-3">{feature.icon}</div>
                 <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                <p className="text-[#E8E8E8]/70">{feature.description}</p>
+                <p className="text-muted">{feature.description}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -77,7 +77,7 @@ const Hero = () => {
               <div className="text-3xl lg:text-4xl font-bold gradient-text mb-2">
                 {stat.value}
               </div>
-              <div className="text-[#E8E8E8]/70">{stat.label}</div>
+              <div className="text-muted">{stat.label}</div>
             </div>
           ))}
         </motion.div>
