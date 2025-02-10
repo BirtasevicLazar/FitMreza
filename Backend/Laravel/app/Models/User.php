@@ -23,8 +23,6 @@ class User extends Authenticatable
         'email',
         'password',
         'phone_number',
-        'bio',
-        'profile_image',
         'type',
         'is_active'
     ];
@@ -48,8 +46,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'is_active' => 'boolean',
-        'last_login_at' => 'datetime',
     ];
+
+    protected $with = ['trainerDetails'];
 
     public function trainerDetails()
     {

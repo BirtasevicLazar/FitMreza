@@ -1,1 +1,168 @@
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Najdublja crna i najsjajnija srebrna */
+:root {
+  color-scheme: dark;
+  --deepest-black: #000000;
+  --shiny-silver: #E8E8E8;
+}
+
+@layer base {
+  body {
+    @apply bg-[#000000] text-[#E8E8E8] font-sans antialiased;
+    background: var(--deepest-black);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight text-[#E8E8E8];
+    text-shadow: 0 0 10px rgba(232, 232, 232, 0.3);
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 
+           focus:outline-none focus:ring-2 focus:ring-[#E8E8E8];
+  }
+
+  .btn-primary {
+    @apply bg-[#E8E8E8] text-[#000000] hover:bg-[#FFFFFF]
+           shadow-lg shadow-[#E8E8E8]/20;
+  }
+
+  .btn-secondary {
+    @apply bg-[#000000] text-[#E8E8E8] hover:bg-[#000000]
+           border-2 border-[#E8E8E8] hover:shadow-[#E8E8E8]/20 hover:shadow-lg;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2 bg-[#000000] border-2 border-[#E8E8E8] rounded-lg text-[#E8E8E8] 
+           placeholder-[#E8E8E8]/70 focus:outline-none focus:ring-2 focus:ring-[#E8E8E8] 
+           focus:border-transparent transition-all duration-200
+           shadow-inner shadow-[#E8E8E8]/10;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-[#E8E8E8] mb-1;
+  }
+
+  .card {
+    @apply bg-[#000000] rounded-lg p-6 border-2 border-[#E8E8E8]
+           shadow-lg shadow-[#E8E8E8]/10 transition-all duration-200;
+  }
+
+  .card-header {
+    @apply border-b-2 border-[#E8E8E8] pb-4 mb-4;
+  }
+
+  .nav-link {
+    @apply text-[#E8E8E8] hover:text-[#FFFFFF] px-3 py-2 rounded-md text-sm font-medium 
+           transition-all duration-200 hover:bg-[#000000] border-2 border-transparent 
+           hover:border-[#E8E8E8] hover:shadow-lg hover:shadow-[#E8E8E8]/10;
+  }
+
+  .nav-link-active {
+    @apply text-[#FFFFFF] bg-[#000000] border-2 border-[#E8E8E8] shadow-lg shadow-[#E8E8E8]/10;
+  }
+
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .gradient-text {
+    @apply text-[#E8E8E8] font-bold;
+    text-shadow: 0 0 10px rgba(232, 232, 232, 0.5);
+  }
+
+  .hover-card {
+    @apply transform transition-all duration-300 hover:scale-105 
+           hover:shadow-2xl hover:shadow-[#E8E8E8]/30
+           border-2 border-[#E8E8E8];
+  }
+
+  /* Navbar specifične klase */
+  .navbar {
+    @apply bg-[#000000] border-b-2 border-[#E8E8E8]/10 backdrop-blur-md;
+  }
+
+  /* Footer specifične klase */
+  .footer {
+    @apply bg-[#000000] border-t-2 border-[#E8E8E8]/10;
+  }
+
+  /* Dashboard specifične klase */
+  .dashboard-container {
+    @apply bg-[#000000] min-h-screen;
+  }
+
+  .dashboard-card {
+    @apply bg-[#000000] border-2 border-[#E8E8E8] rounded-lg p-6
+           shadow-lg shadow-[#E8E8E8]/10;
+  }
+
+  .dashboard-section {
+    @apply bg-[#000000] border-2 border-[#E8E8E8] rounded-lg p-6 mb-6;
+  }
+
+  /* Forme i input polja */
+  .form-container {
+    @apply max-w-md w-full mx-auto bg-[#000000] rounded-lg p-8
+           border-2 border-[#E8E8E8] shadow-lg shadow-[#E8E8E8]/10;
+  }
+
+  .error-text {
+    @apply text-red-400 text-sm mt-1 font-semibold;
+    text-shadow: 0 0 8px rgba(248, 113, 113, 0.4);
+  }
+
+  .success-text {
+    @apply text-green-400 text-sm mt-1 font-semibold;
+    text-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
+  }
+
+  .loading-spinner {
+    @apply animate-spin h-5 w-5 text-[#E8E8E8];
+    filter: drop-shadow(0 0 2px rgba(232, 232, 232, 0.5));
+  }
+}
+
+/* Custom Scrollbar sa svetlećim efektom */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-[#000000];
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-[#E8E8E8] rounded-full;
+  border: 2px solid #000000;
+  box-shadow: 0 0 10px rgba(232, 232, 232, 0.3);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Glass Effect sa svetlećim obrubom */
+.glass {
+  @apply backdrop-blur-lg bg-[#000000]/80 border-2 border-[#E8E8E8];
+  box-shadow: 0 0 15px rgba(232, 232, 232, 0.2);
+}

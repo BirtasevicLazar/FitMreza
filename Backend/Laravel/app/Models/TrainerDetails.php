@@ -13,12 +13,7 @@ class TrainerDetails extends Model
         'user_id',
         'specializations',
         'certifications',
-        'hourly_rate',
-        'working_hours',
-        'years_of_experience',
-        'rating',
-        'rating_count',
-        'is_verified'
+        'bio'
     ];
 
     protected $casts = [
