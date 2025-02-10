@@ -41,118 +41,157 @@ const Login = () => {
   };
 
   return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="page-container flex items-center justify-center px-4 sm:px-6 lg:px-8"
-    >
-      <div className="max-w-md w-full">
-        <motion.div 
-          initial={{ y: -20 }}
-          animate={{ y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="text-center mb-8"
-        >
-          <h2 className="text-3xl font-bold mb-2">Dobrodošli nazad</h2>
-          <p className="text-muted">
-            Nemate nalog?{' '}
-            <Link to="/register" className="text-secondary hover-primary">
-              Registrujte se
-            </Link>
-          </p>
-        </motion.div>
+    <div className="min-h-screen bg-gradient-to-b from-[#0A0A0A] to-[#1A1A1A] flex flex-col">
+      {/* Main Content */}
+      <div className="flex-1 flex items-start md:items-center justify-center px-4 md:px-8 pt-24 md:pt-0">
+        <div className="w-full max-w-md">
+          {/* Welcome Text */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-center mb-8"
+          >
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+              Dobrodošli nazad
+            </h2>
+            <p className="text-white/60">
+              Nemate nalog?{' '}
+              <Link 
+                to="/register" 
+                className="text-[#4F46E5] hover:text-[#4338CA] transition-colors font-medium"
+              >
+                Registrujte se
+              </Link>
+            </p>
+          </motion.div>
 
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="form-container"
-        >
-          {error && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="error-text bg-card border border-red-500 p-3 rounded mb-4 text-center"
-            >
-              {error}
-            </motion.div>
-          )}
+          {/* Login Form */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-white/[0.03] backdrop-blur-xl rounded-2xl p-6 md:p-8"
+          >
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 mb-6"
+              >
+                <p className="text-red-500 text-sm text-center font-medium">{error}</p>
+              </motion.div>
+            )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="email" className="form-label">
-                Email adresa
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                className="input-field"
-                placeholder="vasa@email.com"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="password" className="form-label">
-                Lozinka
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                value={formData.password}
-                onChange={handleChange}
-                className="input-field"
-                placeholder="••••••••"
-              />
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="checkbox-custom"
-                />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-muted">
-                  Zapamti me
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="space-y-1">
+                <label 
+                  htmlFor="email" 
+                  className="block text-sm font-medium text-white/80"
+                >
+                  Email adresa
                 </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/10 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#4F46E5] focus:border-transparent transition-all"
+                  placeholder="vasa@email.com"
+                />
               </div>
 
-              <div className="text-sm">
-                <Link to="/forgot-password" className="text-muted hover-primary">
+              <div className="space-y-1">
+                <label 
+                  htmlFor="password" 
+                  className="block text-sm font-medium text-white/80"
+                >
+                  Lozinka
+                </label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/10 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#4F46E5] focus:border-transparent transition-all"
+                  placeholder="••••••••"
+                />
+              </div>
+
+              <div className="flex items-center justify-between pt-2">
+                <div className="flex items-center">
+                  <input
+                    id="remember-me"
+                    name="remember-me"
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-white/10 bg-white/[0.03] text-[#4F46E5] focus:ring-[#4F46E5] focus:ring-offset-0"
+                  />
+                  <label 
+                    htmlFor="remember-me" 
+                    className="ml-2 block text-sm text-white/60"
+                  >
+                    Zapamti me
+                  </label>
+                </div>
+
+                <Link 
+                  to="/forgot-password" 
+                  className="text-sm text-white/60 hover:text-white transition-colors"
+                >
                   Zaboravili ste lozinku?
                 </Link>
               </div>
-            </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn btn-primary w-full"
-            >
-              {loading ? (
-                <span className="flex items-center justify-center">
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Učitavanje...
+              <motion.button
+                type="submit"
+                disabled={loading}
+                className="relative w-full mt-6 bg-gradient-to-r from-[#4F46E5] to-[#4338CA] text-white font-medium py-3 px-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4F46E5] focus:ring-offset-2 focus:ring-offset-[#0A0A0A] disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden group"
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+              >
+                <span className="relative z-10">
+                  {loading ? (
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full mx-auto"
+                    />
+                  ) : (
+                    'Prijavi se'
+                  )}
                 </span>
-              ) : (
-                'Prijavi se'
-              )}
-            </button>
-          </form>
-        </motion.div>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-[#4338CA] to-[#4F46E5] opacity-0 group-hover:opacity-100 transition-opacity"
+                  initial={false}
+                  animate={{ opacity: 0 }}
+                  whileHover={{ opacity: 1 }}
+                />
+              </motion.button>
+            </form>
+          </motion.div>
+
+          {/* Footer Links */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="mt-8 text-center text-sm text-white/40"
+          >
+            <Link to="/terms" className="hover:text-white/60 transition-colors">
+              Uslovi korišćenja
+            </Link>
+            <span className="mx-2">•</span>
+            <Link to="/privacy" className="hover:text-white/60 transition-colors">
+              Politika privatnosti
+            </Link>
+          </motion.div>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
