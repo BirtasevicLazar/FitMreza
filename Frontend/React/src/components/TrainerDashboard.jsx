@@ -115,10 +115,7 @@ const TrainerDashboard = () => {
                   transition={{ delay: 0.2 }}
                   className="relative -mt-16 md:mt-0"
                 >
-                  <div className="relative">
-                    <ProfileImage user={trainer} onImageUpdate={handleImageUpdate} />
-                    <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-[#1A1A1A]" />
-                  </div>
+                  <ProfileImage user={trainer} onImageUpdate={handleImageUpdate} />
                 </motion.div>
                 
                 {/* Basic Info */}
