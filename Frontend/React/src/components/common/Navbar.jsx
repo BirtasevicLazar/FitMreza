@@ -90,18 +90,35 @@ const Navbar = ({ isAuthenticated, userType, onLogout }) => {
               ) : (
                 <>
                   <Link
-                    to={userType === 'trainer' ? '/trainer-dashboard' : '/user-dashboard'}
-                    className="relative group px-4 py-2"
+                    to={userType === 'trainer' ? '/trainer-profile' : '/user-profile'}
+                    className="relative group px-4 py-2 flex items-center space-x-2"
                   >
+                    <svg 
+                      className={`w-5 h-5 transition-colors duration-300 ${
+                        isActive('/trainer-profile') || isActive('/user-profile') 
+                          ? 'text-white' 
+                          : 'text-white/80 group-hover:text-white'
+                      }`}
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor"
+                    >
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        strokeWidth={2} 
+                        d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
                     <span className={`text-sm font-medium transition-colors duration-300 ${
-                      isActive('/trainer-dashboard') || isActive('/user-dashboard') 
+                      isActive('/trainer-profile') || isActive('/user-profile') 
                         ? 'text-white' 
-                        : 'text-white/80 hover:text-white'
+                        : 'text-white/80 group-hover:text-white'
                     }`}>
-                      Dashboard
+                      Profil
                     </span>
                     <div className={`absolute bottom-0 left-0 h-0.5 bg-[#4F46E5] transition-all duration-300 ${
-                      isActive('/trainer-dashboard') || isActive('/user-dashboard') 
+                      isActive('/trainer-profile') || isActive('/user-profile') 
                         ? 'w-full' 
                         : 'w-0 group-hover:w-full'
                     }`} />
@@ -196,11 +213,24 @@ const Navbar = ({ isAuthenticated, userType, onLogout }) => {
                   ) : (
                     <div className="flex flex-col space-y-3">
                       <Link
-                        to={userType === 'trainer' ? '/trainer-dashboard' : '/user-dashboard'}
+                        to={userType === 'trainer' ? '/trainer-profile' : '/user-profile'}
                         onClick={() => setIsOpen(false)}
-                        className="text-center text-sm font-medium text-white/80 hover:text-white px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
+                        className="text-center text-sm font-medium text-white/80 hover:text-white px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300 backdrop-blur-sm flex items-center justify-center space-x-2"
                       >
-                        Dashboard
+                        <svg 
+                          className="w-5 h-5" 
+                          fill="none" 
+                          viewBox="0 0 24 24" 
+                          stroke="currentColor"
+                        >
+                          <path 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            strokeWidth={2} 
+                            d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                        <span>Profil</span>
                       </Link>
                       <button
                         onClick={() => {

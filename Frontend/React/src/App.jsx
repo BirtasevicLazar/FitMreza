@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
-import UserDashboard from './components/UserDashboard';
-import TrainerDashboard from './components/TrainerDashboard';
+import UserProfile from './components/UserProfile';
+import TrainerProfile from './components/TrainerProfile';
 import Home from './components/Home';
 import Layout from './components/common/Layout';
 import axios from 'axios';
@@ -48,18 +48,18 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route
-            path="/user-dashboard"
+            path="/user-profile"
             element={
               <ProtectedRoute>
-                <UserDashboard />
+                <UserProfile />
               </ProtectedRoute>
             }
           />
           <Route
-            path="/trainer-dashboard"
+            path="/trainer-profile"
             element={
               <ProtectedRoute>
-                <TrainerDashboard />
+                <TrainerProfile />
               </ProtectedRoute>
             }
           />

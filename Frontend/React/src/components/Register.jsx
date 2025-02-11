@@ -85,7 +85,7 @@ const Register = () => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
         
-        navigate(response.data.user.type === 'trainer' ? '/trainer-dashboard' : '/user-dashboard');
+        navigate(response.data.user.type === 'trainer' ? '/trainer-profile' : '/user-profile');
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Došlo je do greške prilikom registracije');
