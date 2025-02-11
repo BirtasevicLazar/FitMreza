@@ -222,21 +222,23 @@ class AuthController extends Controller
 
             // Delete old image if exists
             if ($user->profile_image) {
-                Storage::disk('public')->delete($user->profile_image);
+                $oldPath = str_replace('public/', '', $user->profile_image);
+                Storage::disk('public')->delete($oldPath);
             }
 
             // Store new image
-            $profileImagePath = $request->file('profile_image')->store('profile-images', 'public');
+            $file = $request->file('profile_image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('profile-images', $filename, 'public');
             
-            $user->profile_image = $profileImagePath;
+            $user->profile_image = $path;
             $user->save();
-
-            $user->load('trainerDetails');
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Profile image updated successfully',
-                'user' => $user
+                'user' => $user,
+                'image_url' => $user->profile_image_url
             ], Response::HTTP_OK);
 
         } catch (\Exception $e) {
