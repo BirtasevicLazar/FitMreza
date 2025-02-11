@@ -13,6 +13,8 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 
 class AuthController extends Controller
 {
@@ -30,7 +32,9 @@ class AuthController extends Controller
                 'type' => 'required|in:user,trainer',
                 'specializations' => 'required_if:type,trainer|nullable|string|max:500',
                 'certifications' => 'required_if:type,trainer|nullable|string|max:500',
-                'bio' => 'required_if:type,trainer|nullable|string|max:1000'
+                'bio' => 'required_if:type,trainer|nullable|string|max:1000',
+                'profile_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                'cover_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
             ]);
 
             if ($validator->fails()) {
@@ -44,12 +48,24 @@ class AuthController extends Controller
             DB::beginTransaction();
 
             try {
+                $profileImagePath = null;
+                if ($request->hasFile('profile_image')) {
+                    $profileImagePath = $request->file('profile_image')->store('profile-images', 'public');
+                }
+
+                $coverImagePath = null;
+                if ($request->hasFile('cover_image')) {
+                    $coverImagePath = $request->file('cover_image')->store('cover-images', 'public');
+                }
+
                 $user = User::create([
                     'name' => $request->name,
                     'email' => $request->email,
                     'password' => Hash::make($request->password),
                     'phone_number' => $request->phone_number,
                     'type' => $request->type,
+                    'profile_image' => $profileImagePath,
+                    'cover_image' => $coverImagePath,
                     'is_active' => true
                 ]);
 
@@ -182,6 +198,152 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to get user data',
+                'error' => $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function updateProfileImage(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'profile_image' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+
+            $user = $request->user();
+
+            // Delete old image if exists
+            if ($user->profile_image) {
+                Storage::disk('public')->delete($user->profile_image);
+            }
+
+            // Store new image
+            $profileImagePath = $request->file('profile_image')->store('profile-images', 'public');
+            
+            $user->profile_image = $profileImagePath;
+            $user->save();
+
+            $user->load('trainerDetails');
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Profile image updated successfully',
+                'user' => $user
+            ], Response::HTTP_OK);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to update profile image',
+                'error' => $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function removeProfileImage(Request $request)
+    {
+        try {
+            $user = $request->user();
+
+            if ($user->profile_image) {
+                Storage::disk('public')->delete($user->profile_image);
+                $user->profile_image = null;
+                $user->save();
+            }
+
+            $user->load('trainerDetails');
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Profile image removed successfully',
+                'user' => $user
+            ], Response::HTTP_OK);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to remove profile image',
+                'error' => $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function updateCoverImage(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'cover_image' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+
+            $user = $request->user();
+
+            // Delete old image if exists
+            if ($user->cover_image) {
+                Storage::disk('public')->delete($user->cover_image);
+            }
+
+            // Store new image
+            $coverImagePath = $request->file('cover_image')->store('cover-images', 'public');
+            
+            $user->cover_image = $coverImagePath;
+            $user->save();
+
+            $user->load('trainerDetails');
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Cover image updated successfully',
+                'user' => $user
+            ], Response::HTTP_OK);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to update cover image',
+                'error' => $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function removeCoverImage(Request $request)
+    {
+        try {
+            $user = $request->user();
+
+            if ($user->cover_image) {
+                Storage::disk('public')->delete($user->cover_image);
+                $user->cover_image = null;
+                $user->save();
+            }
+
+            $user->load('trainerDetails');
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Cover image removed successfully',
+                'user' => $user
+            ], Response::HTTP_OK);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to remove cover image',
                 'error' => $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

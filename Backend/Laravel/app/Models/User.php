@@ -24,7 +24,9 @@ class User extends Authenticatable
         'password',
         'phone_number',
         'type',
-        'is_active'
+        'is_active',
+        'profile_image',
+        'cover_image'
     ];
 
     /**
@@ -49,6 +51,24 @@ class User extends Authenticatable
     ];
 
     protected $with = ['trainerDetails'];
+
+    protected $appends = ['profile_image_url', 'cover_image_url'];
+
+    public function getProfileImageUrlAttribute()
+    {
+        if (!$this->profile_image) {
+            return null;
+        }
+        return url('storage/' . $this->profile_image);
+    }
+
+    public function getCoverImageUrlAttribute()
+    {
+        if (!$this->cover_image) {
+            return null;
+        }
+        return url('storage/' . $this->cover_image);
+    }
 
     public function trainerDetails()
     {

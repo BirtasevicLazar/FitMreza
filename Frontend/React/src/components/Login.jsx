@@ -43,8 +43,8 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0A0A0A] to-[#1A1A1A] flex flex-col">
       {/* Main Content */}
-      <div className="flex-1 flex items-start md:items-center justify-center px-4 md:px-8 pt-24 md:pt-0">
-        <div className="w-full max-w-md">
+      <div className="flex-1 flex items-center justify-center px-4 md:px-8">
+        <div className="w-full max-w-md py-8 md:py-0">
           {/* Welcome Text */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
