@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 import axios from 'axios';
@@ -10,23 +10,6 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-// Custom styles for Swiper
-const swiperStyles = {
-  '.featured-trainers-slider .swiper-pagination-bullet': {
-    background: 'rgba(255, 255, 255, 0.2)',
-    opacity: 1,
-  },
-  '.featured-trainers-slider .swiper-pagination-bullet-active': {
-    background: '#4F46E5',
-  },
-  '.featured-trainers-slider .swiper-button-next, .featured-trainers-slider .swiper-button-prev': {
-    color: '#4F46E5',
-  },
-  '.featured-trainers-slider .swiper-button-disabled': {
-    opacity: 0.3,
-  },
-};
-
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
@@ -34,7 +17,6 @@ const api = axios.create({
   }
 });
 
-// Add a request interceptor
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -42,6 +24,86 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+const TrainerCard = ({ trainer, priority = false }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  const handleImageLoad = useCallback(() => {
+    setImageLoaded(true);
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="h-[500px] rounded-2xl overflow-hidden group relative bg-white/[0.02] shadow-lg"
+    >
+      {/* Image Container */}
+      <div className="relative h-[280px] overflow-hidden">
+        {/* Skeleton loader */}
+        <div className={`absolute inset-0 bg-white/[0.02] animate-pulse
+          ${imageLoaded ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`} />
+        
+        <img
+          src={trainer.profile_image_url}
+          alt={trainer.name}
+          loading={priority ? "eager" : "lazy"}
+          onLoad={handleImageLoad}
+          className={`w-full h-full object-cover transform transition-all duration-500 
+            ${imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'}
+            group-hover:scale-110`}
+        />
+      </div>
+
+      {/* Content Container */}
+      <div className="relative p-6 flex flex-col h-[220px]">
+        {/* Name and Specializations */}
+        <div className="mb-4">
+          <h3 className="text-xl font-bold text-white mb-2 truncate">
+            {trainer.name}
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {trainer.trainer_details?.specializations?.split(',')
+              .slice(0, 2)
+              .map((spec, index) => (
+                <span
+                  key={index}
+                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-400"
+                >
+                  {spec.trim()}
+                </span>
+              ))}
+          </div>
+        </div>
+
+        {/* Bio */}
+        <p className="text-white/60 text-sm line-clamp-2 mb-4 flex-grow">
+          {trainer.trainer_details?.bio || 'Bio nije unet'}
+        </p>
+
+        {/* Button */}
+        <Link
+          to={`/trainer/${trainer.id}`}
+          className="inline-flex items-center justify-center px-4 py-2 rounded-xl 
+            bg-gradient-to-r from-indigo-600 to-indigo-500 text-white font-medium 
+            transform transition-all duration-300 hover:from-indigo-500 hover:to-indigo-600
+            hover:shadow-lg hover:shadow-indigo-500/25 active:scale-[0.98]"
+        >
+          <span>Pogledaj Profil</span>
+          <svg
+            className="w-4 h-4 ml-2 transform transition-transform group-hover:translate-x-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </Link>
+      </div>
+    </motion.div>
+  );
+};
 
 const FeaturedTrainers = () => {
   const [trainers, setTrainers] = useState([]);
@@ -66,14 +128,10 @@ const FeaturedTrainers = () => {
     fetchTrainers();
   }, []);
 
-  const getDefaultImage = () => {
-    return `${import.meta.env.VITE_API_URL}/images/default-profile.png`;
-  };
-
   if (loading) {
     return (
       <div className="flex justify-center items-center py-20">
-        <div className="w-8 h-8 border-2 border-[#4F46E5] border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -81,9 +139,9 @@ const FeaturedTrainers = () => {
   if (error) {
     return (
       <div className="flex justify-center items-center py-20">
-        <div className="text-white/60 text-center">
+        <div className="text-gray-400 text-center">
           <p>{error}</p>
-          <Link to="/login" className="text-[#4F46E5] hover:underline mt-2 inline-block">
+          <Link to="/login" className="text-indigo-500 hover:text-indigo-400 mt-2 inline-block">
             Prijavi se
           </Link>
         </div>
@@ -92,11 +150,11 @@ const FeaturedTrainers = () => {
   }
 
   return (
-    <section className="py-20 bg-gradient-to-b from-[#0A0A0A] to-[#1A1A1A]">
-      <div className="container-custom">
+    <section className="py-20">
+      <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -104,7 +162,7 @@ const FeaturedTrainers = () => {
           >
             Istaknuti Treneri
           </motion.h2>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -117,109 +175,63 @@ const FeaturedTrainers = () => {
 
         {/* Trainers Slider */}
         <Swiper
-          modules={[Pagination, Navigation, Autoplay]}
-          spaceBetween={32}
+          modules={[Pagination, Autoplay]}
+          spaceBetween={24}
           slidesPerView={1}
-          pagination={{ clickable: true }}
-          navigation
-          autoplay={{ delay: 5000, disableOnInteraction: false }}
-          className="featured-trainers-slider !pb-12"
+          pagination={{
+            clickable: true,
+            dynamicBullets: true,
+          }}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }}
+          className="!pb-14"
           breakpoints={{
             640: {
               slidesPerView: 2,
+              spaceBetween: 24,
             },
             1024: {
               slidesPerView: 3,
+              spaceBetween: 32,
             },
           }}
         >
-          {trainers.map((trainer) => (
-            <SwiperSlide key={trainer.id}>
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                className="relative bg-gradient-to-br from-white/[0.05] to-white/[0.02] backdrop-blur-xl rounded-3xl overflow-hidden shadow-2xl group hover:shadow-[#4F46E5]/20 transition-all duration-300"
-              >
-                {/* Cover Image */}
-                <div className="relative h-32 sm:h-40 overflow-hidden">
-                  <img
-                    src={trainer.cover_image_url}
-                    alt={`${trainer.name}'s cover`}
-                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/40" />
-                </div>
-
-                {/* Profile Image */}
-                <div className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2">
-                  <div className="relative">
-                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-[#1A1A1A] shadow-xl">
-                      <img
-                        src={trainer.profile_image_url}
-                        alt={trainer.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="absolute inset-0 rounded-full ring-2 ring-[#4F46E5]/20 ring-offset-2 ring-offset-[#1A1A1A]" />
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="pt-16 p-6 text-center">
-                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">
-                    {trainer.name}
-                  </h3>
-                  
-                  {/* Specializations */}
-                  <div className="flex flex-wrap justify-center gap-2 mb-4">
-                    {trainer.trainer_details?.specializations?.split(',').slice(0, 3).map((spec, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 rounded-full bg-[#4F46E5]/10 text-[#4F46E5] text-sm font-medium"
-                      >
-                        {spec.trim()}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Bio Preview */}
-                  <p className="text-white/60 text-sm line-clamp-3 mb-6">
-                    {trainer.trainer_details?.bio || 'Bio nije unet'}
-                  </p>
-
-                  {/* View Profile Button */}
-                  <Link
-                    to={`/trainer/${trainer.id}`}
-                    className="inline-flex items-center justify-center w-full px-6 py-3 rounded-xl bg-[#4F46E5] hover:bg-[#4F46E5]/90 text-white font-medium transition-all duration-300 group"
-                  >
-                    <span>Pogledaj Profil</span>
-                    <svg 
-                      className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" 
-                      fill="none" 
-                      viewBox="0 0 24 24" 
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </Link>
-                </div>
-              </motion.div>
-            </SwiperSlide>
-          ))}
+          <AnimatePresence>
+            {trainers.map((trainer, index) => (
+              <SwiperSlide key={trainer.id}>
+                <TrainerCard trainer={trainer} priority={index < 3} />
+              </SwiperSlide>
+            ))}
+          </AnimatePresence>
         </Swiper>
       </div>
 
-      {/* Apply custom styles */}
-      <style>
-        {Object.entries(swiperStyles)
-          .map(([selector, styles]) => 
-            `${selector} { ${Object.entries(styles)
-              .map(([property, value]) => `${property}: ${value}`)
-              .join('; ')} }`
-          )
-          .join('\n')}
-      </style>
+      <style>{`
+        .swiper-pagination {
+          position: relative;
+          bottom: 0 !important;
+          margin-top: 2rem;
+        }
+
+        .swiper-pagination-bullet {
+          background: rgba(255, 255, 255, 0.2);
+          opacity: 1;
+          width: 10px;
+          height: 10px;
+          margin: 0 6px !important;
+          transition: all 0.3s ease;
+        }
+        
+        .swiper-pagination-bullet-active {
+          background: #4F46E5;
+          transform: scale(1.3);
+          width: 12px;
+          height: 12px;
+        }
+      `}</style>
     </section>
   );
 };
