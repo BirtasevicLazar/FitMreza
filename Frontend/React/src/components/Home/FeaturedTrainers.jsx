@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -25,12 +25,8 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-const TrainerCard = ({ trainer, priority = false }) => {
+const TrainerCard = ({ trainer }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
-
-  const handleImageLoad = useCallback(() => {
-    setImageLoaded(true);
-  }, []);
 
   return (
     <motion.div
@@ -41,15 +37,11 @@ const TrainerCard = ({ trainer, priority = false }) => {
     >
       {/* Image Container */}
       <div className="relative h-[280px] overflow-hidden">
-        {/* Skeleton loader */}
-        <div className={`absolute inset-0 bg-white/[0.02] animate-pulse
-          ${imageLoaded ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`} />
-        
         <img
           src={trainer.profile_image_url}
           alt={trainer.name}
-          loading={priority ? "eager" : "lazy"}
-          onLoad={handleImageLoad}
+          loading="eager"
+          onLoad={() => setImageLoaded(true)}
           className={`w-full h-full object-cover transform transition-all duration-500 
             ${imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'}
             group-hover:scale-110`}
@@ -107,7 +99,6 @@ const TrainerCard = ({ trainer, priority = false }) => {
 
 const FeaturedTrainers = () => {
   const [trainers, setTrainers] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -120,21 +111,11 @@ const FeaturedTrainers = () => {
         console.error('Error fetching trainers:', error);
         setError('Nije moguće učitati trenere trenutno.');
         setTrainers([]);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchTrainers();
   }, []);
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-20">
-        <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
 
   if (error) {
     return (
@@ -187,6 +168,7 @@ const FeaturedTrainers = () => {
             disableOnInteraction: false,
             pauseOnMouseEnter: true,
           }}
+          watchSlidesProgress={true}
           className="!pb-14"
           breakpoints={{
             640: {
@@ -202,7 +184,7 @@ const FeaturedTrainers = () => {
           <AnimatePresence>
             {trainers.map((trainer, index) => (
               <SwiperSlide key={trainer.id}>
-                <TrainerCard trainer={trainer} priority={index < 3} />
+                <TrainerCard trainer={trainer} />
               </SwiperSlide>
             ))}
           </AnimatePresence>

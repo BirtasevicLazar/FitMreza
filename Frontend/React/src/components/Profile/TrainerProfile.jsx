@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
-import ProfileImage from './common/ProfileImage';
-import CoverImage from './common/CoverImage';
+import ProfileImage from '../common/ProfileImage';
+import CoverImage from '../common/CoverImage';
 
 const TrainerProfile = () => {
   const [trainer, setTrainer] = useState(null);
@@ -100,7 +100,7 @@ const TrainerProfile = () => {
       >
         {/* Cover Image Container */}
         <div className="relative h-[400px] md:h-[500px] w-full">
-          <CoverImage user={trainer} onImageUpdate={handleImageUpdate} />
+          <CoverImage user={trainer} onImageUpdate={handleImageUpdate} ignorePlaceholder={true} />
         </div>
         
         {/* Profile Info Overlay */}
@@ -115,7 +115,7 @@ const TrainerProfile = () => {
                   transition={{ delay: 0.2 }}
                   className="relative -mt-16 md:mt-0"
                 >
-                  <ProfileImage user={trainer} onImageUpdate={handleImageUpdate} />
+                  <ProfileImage user={trainer} onImageUpdate={handleImageUpdate} ignorePlaceholder={true} />
                 </motion.div>
                 
                 {/* Basic Info */}

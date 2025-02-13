@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import Hero from './Hero';
-import FeaturedTrainers from './FeaturedTrainers';
+import FeaturedTrainers from './FeaturedTrainers';    
 
 const Home = () => {
   return (

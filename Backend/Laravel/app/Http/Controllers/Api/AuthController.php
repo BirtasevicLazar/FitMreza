@@ -15,9 +15,17 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
+use App\Services\ImageService;
 
 class AuthController extends Controller
 {
+    protected $imageService;
+
+    public function __construct(ImageService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
+
     public function register(Request $request)
     {
         try {
@@ -50,12 +58,18 @@ class AuthController extends Controller
             try {
                 $profileImagePath = null;
                 if ($request->hasFile('profile_image')) {
-                    $profileImagePath = $request->file('profile_image')->store('profile-images', 'public');
+                    $profileImagePath = $this->imageService->optimizeAndStore(
+                        $request->file('profile_image'),
+                        'profile-images'
+                    );
                 }
 
                 $coverImagePath = null;
                 if ($request->hasFile('cover_image')) {
-                    $coverImagePath = $request->file('cover_image')->store('cover-images', 'public');
+                    $coverImagePath = $this->imageService->optimizeAndStore(
+                        $request->file('cover_image'),
+                        'cover-images'
+                    );
                 }
 
                 $user = User::create([
@@ -222,14 +236,14 @@ class AuthController extends Controller
 
             // Delete old image if exists
             if ($user->profile_image) {
-                $oldPath = str_replace('public/', '', $user->profile_image);
-                Storage::disk('public')->delete($oldPath);
+                Storage::disk('public')->delete($user->profile_image);
             }
 
-            // Store new image
-            $file = $request->file('profile_image');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('profile-images', $filename, 'public');
+            // Store optimized image
+            $path = $this->imageService->optimizeAndStore(
+                $request->file('profile_image'),
+                'profile-images'
+            );
             
             $user->profile_image = $path;
             $user->save();
@@ -300,13 +314,14 @@ class AuthController extends Controller
                 Storage::disk('public')->delete($user->cover_image);
             }
 
-            // Store new image
-            $coverImagePath = $request->file('cover_image')->store('cover-images', 'public');
+            // Store optimized image
+            $path = $this->imageService->optimizeAndStore(
+                $request->file('cover_image'),
+                'cover-images'
+            );
             
-            $user->cover_image = $coverImagePath;
+            $user->cover_image = $path;
             $user->save();
-
-            $user->load('trainerDetails');
 
             return response()->json([
                 'status' => 'success',

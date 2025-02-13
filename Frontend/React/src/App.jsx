@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import Login from './components/Login';
-import Register from './components/Register';
-import UserProfile from './components/UserProfile';
-import TrainerProfile from './components/TrainerProfile';
-import Home from './components/Home';
+import Login from './components/Auth/Login';
+import Register from './components/Auth/Register';
+import UserProfile from './components/Profile/UserProfile';
+import TrainerProfile from './components/Profile/TrainerProfile';
+import Home from './components/Home/Home';
 import Layout from './components/common/Layout';
 import axios from 'axios';
 import { useEffect } from 'react';

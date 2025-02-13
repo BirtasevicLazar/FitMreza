@@ -2,11 +2,19 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 
-const ProfileImage = ({ user, onImageUpdate }) => {
+const ProfileImage = ({ user, onImageUpdate, ignorePlaceholder = false }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
+
+  // Helper funkcija za proveru da li je URL placeholder
+  const isPlaceholderUrl = (url) => {
+    return url?.includes('ui-avatars.com');
+  };
+
+  // Određivanje da li treba prikazati sliku
+  const shouldShowImage = user.profile_image_url && (!ignorePlaceholder || !isPlaceholderUrl(user.profile_image_url));
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
@@ -84,7 +92,7 @@ const ProfileImage = ({ user, onImageUpdate }) => {
           className="relative cursor-pointer group"
           onClick={() => setShowModal(true)}
         >
-          {user.profile_image_url ? (
+          {shouldShowImage ? (
             <div className="relative">
               <img
                 src={user.profile_image_url}
@@ -102,8 +110,8 @@ const ProfileImage = ({ user, onImageUpdate }) => {
               </div>
             </div>
           ) : (
-            <div className="w-32 h-32 rounded-full bg-gradient-to-r from-[#4F46E5]/10 to-[#4338CA]/10 border-4 border-[#4F46E5]/20 flex items-center justify-center group-hover:bg-[#4F46E5]/20 transition-colors">
-              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+            <div className="w-32 h-32 rounded-full bg-[#1A1A1A] border-4 border-[#4F46E5]/20 flex items-center justify-center group-hover:bg-[#4F46E5]/10 transition-colors">
+              <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
                 <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -162,7 +170,7 @@ const ProfileImage = ({ user, onImageUpdate }) => {
                   </span>
                 </label>
 
-                {user.profile_image_url && (
+                {shouldShowImage && (
                   <button
                     onClick={handleRemoveImage}
                     disabled={isUploading}

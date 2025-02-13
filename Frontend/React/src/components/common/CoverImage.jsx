@@ -2,11 +2,19 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 
-const CoverImage = ({ user, onImageUpdate }) => {
+const CoverImage = ({ user, onImageUpdate, ignorePlaceholder = false }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
+
+  // Helper funkcija za proveru da li je URL placeholder
+  const isPlaceholderUrl = (url) => {
+    return url?.includes('placehold.co');
+  };
+
+  // Određivanje da li treba prikazati sliku
+  const shouldShowImage = user.cover_image_url && (!ignorePlaceholder || !isPlaceholderUrl(user.cover_image_url));
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
@@ -81,7 +89,7 @@ const CoverImage = ({ user, onImageUpdate }) => {
         className="relative w-full h-full cursor-pointer group" 
         onClick={() => setShowModal(true)}
       >
-        {user.cover_image_url ? (
+        {shouldShowImage ? (
           <>
             <img
               src={user.cover_image_url}
@@ -103,13 +111,12 @@ const CoverImage = ({ user, onImageUpdate }) => {
             </div>
           </>
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-[#4F46E5]/20 via-[#4338CA]/20 to-[#4F46E5]/20 backdrop-blur-xl flex items-center justify-center">
+          <div className="w-full h-full bg-[#1A1A1A] flex items-center justify-center group-hover:bg-[#4F46E5]/5 transition-colors">
             {/* Gornji gradijent za navbar na default pozadini */}
             <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-black/90 via-black/50 to-transparent" />
             
-            {/* Minimalistički indikator */}
-            <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
-              <svg className="w-6 h-6 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center">
+              <svg className="w-8 h-8 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
@@ -135,7 +142,7 @@ const CoverImage = ({ user, onImageUpdate }) => {
               className="bg-[#1A1A1A] rounded-3xl p-6 w-full max-w-sm border border-white/10"
             >
               <h3 className="text-xl font-semibold text-white mb-6 text-center">
-                Izmena Cover Slike
+                Izmena naslovne slike
               </h3>
               
               <div className="space-y-4">
@@ -151,11 +158,11 @@ const CoverImage = ({ user, onImageUpdate }) => {
                     <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    Promeni Cover
+                    Promeni naslovnu sliku
                   </span>
                 </label>
 
-                {user.cover_image_url && (
+                {shouldShowImage && (
                   <button
                     onClick={handleRemoveImage}
                     disabled={isUploading}
@@ -164,7 +171,7 @@ const CoverImage = ({ user, onImageUpdate }) => {
                     <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
-                    Ukloni Cover
+                    Ukloni naslovnu sliku
                   </button>
                 )}
 
