@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { compressImage } from '../../utils/imageCompression';
 import axios from 'axios';
 
 const UpdateProfileImage = ({ onSuccess }) => {
@@ -14,11 +13,8 @@ const UpdateProfileImage = ({ onSuccess }) => {
     setError(null);
 
     try {
-      // Kompresuj sliku pre slanja
-      const compressedImage = await compressImage(file);
-      
       const formData = new FormData();
-      formData.append('profile_image', compressedImage);
+      formData.append('profile_image', file); // Šaljemo originalnu sliku
 
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/update-profile-image`,

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { compressImage } from '../../utils/imageCompression';
 import axios from 'axios';
 
 const RegisterForm = () => {
@@ -16,17 +15,7 @@ const RegisterForm = () => {
     try {
       const formData = new FormData(e.target);
       
-      // Kompresuj slike pre slanja
-      if (formData.get('profile_image')) {
-        const compressedProfileImage = await compressImage(formData.get('profile_image'));
-        formData.set('profile_image', compressedProfileImage);
-      }
-      
-      if (formData.get('cover_image')) {
-        const compressedCoverImage = await compressImage(formData.get('cover_image'));
-        formData.set('cover_image', compressedCoverImage);
-      }
-
+      // Direktno šaljemo originalne slike na backend
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/register`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
