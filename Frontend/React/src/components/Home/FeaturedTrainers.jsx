@@ -99,23 +99,37 @@ const TrainerCard = ({ trainer }) => {
 
 const FeaturedTrainers = () => {
   const [trainers, setTrainers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchTrainers = async () => {
+      setLoading(true);
       try {
         const response = await api.get('/featured-trainers');
-        setTrainers(response.data.trainers);
+        setTrainers(response.data.trainers || []);
         setError(null);
       } catch (error) {
         console.error('Error fetching trainers:', error);
         setError('Nije moguće učitati trenere trenutno.');
         setTrainers([]);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchTrainers();
   }, []);
+
+  if (loading) {
+    return (
+      <section className="py-20">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-white/60">Učitavanje trenera...</p>
+        </div>
+      </section>
+    );
+  }
 
   if (error) {
     return (
@@ -154,41 +168,46 @@ const FeaturedTrainers = () => {
           </motion.p>
         </div>
 
-        {/* Trainers Slider */}
-        <Swiper
-          modules={[Pagination, Autoplay]}
-          spaceBetween={24}
-          slidesPerView={1}
-          pagination={{
-            clickable: true,
-            dynamicBullets: true,
-          }}
-          autoplay={{
-            delay: 5000,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true,
-          }}
-          watchSlidesProgress={true}
-          className="!pb-14"
-          breakpoints={{
-            640: {
-              slidesPerView: 2,
-              spaceBetween: 24,
-            },
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 32,
-            },
-          }}
-        >
-          <AnimatePresence>
-            {trainers.map((trainer, index) => (
-              <SwiperSlide key={trainer.id}>
-                <TrainerCard trainer={trainer} />
-              </SwiperSlide>
-            ))}
-          </AnimatePresence>
-        </Swiper>
+        {trainers.length > 0 ? (
+          <Swiper
+            modules={[Pagination, Autoplay]}
+            spaceBetween={24}
+            slidesPerView={1}
+            pagination={{
+              clickable: true,
+              dynamicBullets: true,
+            }}
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true,
+            }}
+            watchSlidesProgress={true}
+            className="!pb-14"
+            breakpoints={{
+              640: {
+                slidesPerView: 2,
+                spaceBetween: 24,
+              },
+              1024: {
+                slidesPerView: 3,
+                spaceBetween: 32,
+              },
+            }}
+          >
+            <AnimatePresence>
+              {trainers.map((trainer) => (
+                <SwiperSlide key={trainer.id}>
+                  <TrainerCard trainer={trainer} />
+                </SwiperSlide>
+              ))}
+            </AnimatePresence>
+          </Swiper>
+        ) : (
+          <div className="text-center py-10">
+            <p className="text-white/60">Trenutno nema istaknutih trenera.</p>
+          </div>
+        )}
       </div>
 
       <style>{`
@@ -218,4 +237,4 @@ const FeaturedTrainers = () => {
   );
 };
 
-export default FeaturedTrainers; 
+export default FeaturedTrainers;
